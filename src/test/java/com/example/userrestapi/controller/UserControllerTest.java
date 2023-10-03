@@ -16,6 +16,9 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
 @AutoConfigureMockMvc
 public class UserControllerTest {
     @InjectMocks
@@ -43,6 +46,7 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userRequestDto)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+
     }
 
     @Test
@@ -55,7 +59,8 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userRequestDto)))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(content().json("{\"birthDate\":\"birth date can`t be null\"}"));
     }
 
     @Test
